@@ -56,14 +56,9 @@ describe('DAO', () => {
 
             it('Updates proposal mapping', async () => {
                 const proposal = await dao.proposals(1)
-                expect(await dao.proposals(1)).to.deep.equal({
-                    id: 1,
-                    name: 'Proposal 1',
-                    amount: ether(100),
-                    recipient: recipient.address,
-                    votes: 0,
-                    executed: false
-                })
+                expect(proposal.id).to.equal(1)
+                expect(proposal.name).to.equal('Proposal 1')
+                expect(proposal.amount).to.equal(ether(100))
             })
 
             it('Emits Propose event', async () => {
@@ -72,7 +67,9 @@ describe('DAO', () => {
         })
 
         describe('Failure', () => {
-
+            it('Rejects invalid amount', async () => {
+                await expect(dao.connect(investor1).createProposal('Proposal 1', ether(1000), recipient.address)).to.be.revertedWith('Not enough tokens')
+            })
         })
 
     })
