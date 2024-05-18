@@ -9,12 +9,14 @@ const ether = tokens
 
 describe('DAO', () => {
   let token, dao
-  let deployer, funder
+  let deployer, funder, investor1, recipient
 
   beforeEach(async () => {
     let accounts = await ethers.getSigners()
     deployer = accounts[0]
     funder = accounts[1]
+    investor1 = accounts[2]
+    recipient = accounts[3]
 
     const Token = await ethers.getContractFactory('Token')
     token = await Token.deploy('JUST Token', 'JUST', '1000000')
@@ -36,6 +38,25 @@ describe('DAO', () => {
 
     it('Returns quorum', async () => {
       expect(await dao.quorum()).to.equal('500000000000000000000001')
+    })
+
+  })
+
+  describe('Proposal creation', () => {
+    let transaction, result
+    describe('Success', () => {
+        beforeEach(async () => {
+            transaction = await dao.connect(investor1).createProposal('Proposal 1', ether(100), recipient.address)
+            result = await transaction.wait()
+        })
+
+        it('Updates proposal count', async () => {
+            expect(await dao.proposalCount()).to.equal(1)
+        })
+    })
+
+    describe('Failure', () => {
+
     })
 
   })
