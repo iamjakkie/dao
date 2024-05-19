@@ -41,7 +41,8 @@ contract DAO {
         uint256 _amount,
         address payable _recipient
     ) external {
-        require(address(this).balance >= _amount, "Not enough tokens");
+        require(address(this).balance >= _amount, "Not enough Ether");
+        require(Token(token).balanceOf(msg.sender) >= _amount, "Not enough tokens");
 
         proposalCount++;
         proposals[proposalCount] = Proposal(
