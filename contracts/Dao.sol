@@ -36,13 +36,17 @@ contract DAO {
 
     receive() external payable {}
 
+    modifier onlyInvestor() {
+        require(Token(token).balanceOf(msg.sender) > 0, "Not enough tokens");
+        _;
+    }
+
     function createProposal(
         string memory _name,
         uint256 _amount,
         address payable _recipient
-    ) external {
+    ) external onlyInvestor{
         require(address(this).balance >= _amount, "Not enough Ether");
-        require(Token(token).balanceOf(msg.sender) >= _amount, "Not enough tokens");
 
         proposalCount++;
         proposals[proposalCount] = Proposal(

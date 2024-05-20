@@ -9,17 +9,48 @@ const ether = tokens
 
 describe('DAO', () => {
     let token, dao
-    let deployer, funder, investor1, recipient
+    let deployer, 
+        funder, 
+        investor1, 
+        investor2, 
+        investor3,
+        investor4,
+        investor5,
+        recipient,
+        user,
+        transaction
 
     beforeEach(async () => {
         let accounts = await ethers.getSigners()
         deployer = accounts[0]
         funder = accounts[1]
         investor1 = accounts[2]
-        recipient = accounts[3]
+        investor2 = accounts[3]
+        investor3 = accounts[4]
+        investor4 = accounts[5]
+        investor5 = accounts[6]
+        recipient = accounts[7]
+        user = accounts[8]
+
 
         const Token = await ethers.getContractFactory('Token')
         token = await Token.deploy('JUST Token', 'JUST', '1000000')
+
+        // send 20% tokens to each investor
+        transaction = await token.connect(deployer).transfer(investor1.address, tokens(200000))
+        await transaction.wait()
+
+        transaction = await token.connect(deployer).transfer(investor2.address, tokens(200000))
+        await transaction.wait()
+
+        transaction = await token.connect(deployer).transfer(investor3.address, tokens(200000))
+        await transaction.wait()
+
+        transaction = await token.connect(deployer).transfer(investor4.address, tokens(200000))
+        await transaction.wait()
+
+        transaction = await token.connect(deployer).transfer(investor5.address, tokens(200000))
+        await transaction.wait()
 
         const DAO = await ethers.getContractFactory('DAO')
         dao = await DAO.deploy(token.address, '500000000000000000000001')
@@ -68,7 +99,11 @@ describe('DAO', () => {
 
         describe('Failure', () => {
             it('Rejects invalid amount', async () => {
-                await expect(dao.connect(investor1).createProposal('Proposal 1', ether(1000), recipient.address)).to.be.revertedWith('Not enough tokens')
+                await expect(dao.connect(investor1).createProposal('Proposal 1', ether(1000), recipient.address)).to.be.reverted
+            })
+
+            it('Rejects non-investor', async () => {
+                await expect(dao.connect(user).createProposal('Proposal 1', ether(100), recipient.address)).to.be.revertedWith('Not enough tokens')
             })
         })
 
