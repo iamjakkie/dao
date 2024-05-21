@@ -133,20 +133,22 @@ describe('DAO', () => {
             //     expect(vote).to.equal(true)
             // })
 
-            // it('Emits Vote event', async () => {
-            //     await expect(transaction).to.emit(dao, 'Vote').withArgs(1, investor1.address)
-            // })
+            it('Emits Vote event', async () => {
+                await expect(transaction).to.emit(dao, 'Vote').withArgs(1, investor1.address);
+            })
         })
 
         describe('Failure', () => {
-            // it('Rejects invalid proposal', async () => {
-            //     await expect(dao.connect(investor1).vote(2)).to.be.reverted
-            // })
+            it('Rejects non-investor', async () => {
+                await expect(dao.connect(user).createProposal('Proposal 1', ether(100), recipient.address)).to.be.reverted
+            })
 
-            // it('Rejects duplicate vote', async () => {
-            //     await dao.connect(investor1).vote(1)
-            //     await expect(dao.connect(investor1).vote(1)).to.be.reverted
-            // })
+            it('Rejects duplicate vote', async () => {
+                transaction = await dao.connect(investor1).vote(1)
+                await transaction.wait()
+
+                await expect(dao.connect(investor1).vote(1)).to.be.reverted
+            })
         })
     })
 
