@@ -65,6 +65,8 @@ contract DAO {
         Proposal storage proposal = proposals[_id];
         require(proposal.finalized == false, "Proposal already finalized");
 
-        proposal.votes = proposal.votes + 1;
+        proposal.votes += token.balanceOf(msg.sender);
+
+        
     }
 }
