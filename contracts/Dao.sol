@@ -45,7 +45,7 @@ contract DAO {
         string memory _name,
         uint256 _amount,
         address payable _recipient
-    ) external onlyInvestor{
+    ) external onlyInvestor {
         require(address(this).balance >= _amount, "Not enough Ether");
 
         proposalCount++;
@@ -59,5 +59,12 @@ contract DAO {
         );
 
         emit Propose(proposalCount, _amount, _recipient, msg.sender);
+    }
+
+    function vote(uint256 _id) external onlyInvestor {
+        Proposal storage proposal = proposals[_id];
+        require(proposal.finalized == false, "Proposal already finalized");
+
+        proposal.votes = proposal.votes + 1;
     }
 }
