@@ -20,6 +20,7 @@ contract DAO {
 
     uint256 public proposalCount;
     mapping(uint256 => Proposal) public proposals;
+    mapping(address => mapping(uint256 => bool)) public votes;
 
     event Propose(
         uint256 id,
@@ -31,6 +32,10 @@ contract DAO {
     event Vote(
         uint256 id,
         address investor
+    );
+
+    event Finalize(
+        uint256 id
     );
     
 
@@ -67,7 +72,7 @@ contract DAO {
         emit Propose(proposalCount, _amount, _recipient, msg.sender);
     }
 
-    mapping(address => mapping(uint256 => bool)) public votes;
+    
 
     function vote(uint256 _id) external onlyInvestor {
         Proposal storage proposal = proposals[_id];
@@ -78,5 +83,24 @@ contract DAO {
         votes[msg.sender][_id] = true;
 
         emit Vote(_id, msg.sender);
+    }
+
+    function finalizeProposal(uint256 _id) external onlyInvestor {
+        Proposal storage proposal = proposals[_id];
+
+        require(!proposal.finalized, "Proposal already finalized");
+
+        require(proposal.votes >= quorum, "Quorum not reached");
+
+        proposal.finalized = true;
+
+        proposal.recipient.transfer(proposal.amount);
+
+        require(address(this).balance >= proposal.amount, "Not enough Ether");
+
+        (bool sent, ) = proposal.recipient.call{value: proposal.amount}("");
+        require(sent, "Failed to send Ether");
+
+        emit Finalize(proposal.id);
     }
 }
