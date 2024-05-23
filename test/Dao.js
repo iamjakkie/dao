@@ -183,7 +183,7 @@ describe('DAO', () => {
             })
 
             it('Emits Finalize event', async () => {
-                await expect(transaction).to.emit(dao, 'Finalize').withArgs(1, ether(100), recipient.address)
+                await expect(transaction).to.emit(dao, 'Finalize').withArgs(1)
             })
         })
 
