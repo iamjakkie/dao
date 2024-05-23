@@ -94,8 +94,6 @@ contract DAO {
 
         proposal.finalized = true;
 
-        proposal.recipient.transfer(proposal.amount);
-
         require(address(this).balance >= proposal.amount, "Not enough Ether");
 
         (bool sent, ) = proposal.recipient.call{value: proposal.amount}("");
