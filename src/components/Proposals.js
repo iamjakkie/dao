@@ -2,6 +2,8 @@ import { Table } from "react-bootstrap";
 import {Button} from "react-bootstrap";
 import { ethers } from "ethers";
 
+// TODO: add progress bar
+
 const Proposals = ({ provider, dao, proposals, quorum, setIsLoading }) => {
     console.log(proposals);
     return(
@@ -24,14 +26,22 @@ const Proposals = ({ provider, dao, proposals, quorum, setIsLoading }) => {
                         <td>{proposal.id.toString()}</td>
                         <td>{proposal.name}</td>
                         <td>{proposal.recipient}</td>
-                        <td>{proposal.amount.toString()}</td>
+                        <td>{ethers.utils.formatUnits(proposal.amount, 'ether')} ETH</td>
                         <td>{proposal.finalized ? "Finalized" : "Open"}</td>
-                        <td>{proposal.votes.toString()}</td>
+                        <td>{ethers.utils.formatUnits(proposal.votes, 'ether')}</td>
                         <td>
-                            <Button>Vote</Button>
+                            {!proposal.finalized && (
+                                <Button 
+                                variant="primary" style={{ width: '100%'}}>
+                                    Vote
+                                </Button>
+                            )}
                         </td>
                         <td>
-                            <Button>Finalize</Button>
+                            {!proposal.finalized && proposal.votes > quorum (
+                                <Button variant="primary" style={{ width: '100%'}}>Finalize</Button>
+                            )}
+                            
                         </td>
                     </tr>
                 ))}
