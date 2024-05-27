@@ -5,6 +5,7 @@ import { ethers } from 'ethers'
 // Components
 import Navigation from './Navigation';
 import Loading from './Loading';
+import Proposals from './Proposals';
 
 // ABIs: Import your contract ABIs here
 import DAO_ABI from '../abis/DAO.json'
@@ -68,7 +69,7 @@ function App() {
     }
   }, [isLoading]);
 
-  return(
+  return (
     <Container>
       <Navigation account={account} />
 
@@ -78,9 +79,17 @@ function App() {
         <Loading />
       ) : (
         <>
-          <hr/>
-            <p className='text-center'><strong>Treasury Balance:</strong> {treasuryBalance}</p>
-          <hr/>
+          <hr />
+          <p className='text-center'><strong>Treasury Balance:</strong> {treasuryBalance}</p>
+          <hr />
+
+          <Proposals 
+            provider={provider} 
+            dao={dao} 
+            proposals={proposals} 
+            quorum={quorum} 
+            isLoading={isLoading}
+          />
         </>
       )}
     </Container>
