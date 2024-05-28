@@ -6,6 +6,7 @@ import { ethers } from 'ethers'
 import Navigation from './Navigation';
 import Loading from './Loading';
 import Proposals from './Proposals';
+import Create from './Create';
 
 // ABIs: Import your contract ABIs here
 import DAO_ABI from '../abis/DAO.json'
@@ -56,8 +57,7 @@ function App() {
 
     setProposals(items)
 
-    const quorum = await dao.quorum()
-    setQuorum(quorum)
+    setQuorum(await dao.quorum())
 
 
     setIsLoading(false)
@@ -79,6 +79,12 @@ function App() {
         <Loading />
       ) : (
         <>
+          <Create
+            provider={provider}
+            dao={dao}
+            proposals={proposals}
+            setIsLoading={setIsLoading}
+          />
           <hr />
           <p className='text-center'><strong>Treasury Balance:</strong> {treasuryBalance}</p>
           <hr />
@@ -88,7 +94,7 @@ function App() {
             dao={dao} 
             proposals={proposals} 
             quorum={quorum} 
-            isLoading={isLoading}
+            setIsLoading={setIsLoading}
           />
         </>
       )}

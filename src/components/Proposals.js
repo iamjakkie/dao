@@ -5,7 +5,26 @@ import { ethers } from "ethers";
 // TODO: add progress bar
 
 const Proposals = ({ provider, dao, proposals, quorum, setIsLoading }) => {
-    console.log(proposals);
+    const voteHandler = async (id) => {
+        try {
+            const signer = await provider.getSigner()
+            const transaction = await dao.connect(signer).vote(id)
+            await transaction.wait()
+        } catch {
+            window.alert('User rejected or transaction reverted')
+        }
+        setIsLoading(true)
+    }
+    const finalizeHandler = async (id) => {
+        try {
+            const signer = await provider.getSigner()
+            const transaction = await dao.connect(signer).finalizeProposal(id)
+            await transaction.wait()
+        } catch {
+            window.alert('User rejected or transaction reverted')
+        }
+        setIsLoading(true)
+    }
     return(
         <Table striped bordered hover responsive>
             <thead>
@@ -31,15 +50,22 @@ const Proposals = ({ provider, dao, proposals, quorum, setIsLoading }) => {
                         <td>{ethers.utils.formatUnits(proposal.votes, 'ether')}</td>
                         <td>
                             {!proposal.finalized && (
-                                <Button 
-                                variant="primary" style={{ width: '100%'}}>
+                                <Button
+                                    variant="primary" 
+                                    style={{ width: '100%'}}
+                                    onClick={() => voteHandler(proposal.id)}>
                                     Vote
                                 </Button>
                             )}
                         </td>
                         <td>
-                            {!proposal.finalized && proposal.votes > quorum (
-                                <Button variant="primary" style={{ width: '100%'}}>Finalize</Button>
+                            {!proposal.finalized && proposal.votes > quorum && (
+                                <Button 
+                                    variant="primary" 
+                                    style={{ width: '100%'}}
+                                    onClick={() => finalizeHandler(proposal.id)}>
+                                    Finalize
+                                </Button>
                             )}
                             
                         </td>
