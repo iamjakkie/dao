@@ -56,8 +56,10 @@ function App() {
     }
 
     setProposals(items)
+    let quorum = await dao.quorum()
+    quorum = ethers.utils.formatEther(quorum);
 
-    setQuorum(await dao.quorum())
+    setQuorum(quorum)
 
 
     setIsLoading(false)
@@ -87,6 +89,7 @@ function App() {
           />
           <hr />
           <p className='text-center'><strong>Treasury Balance:</strong> {treasuryBalance}</p>
+          <p className='text-center'><strong>Quorum:</strong> {quorum}</p>
           <hr />
 
           <Proposals 
