@@ -152,6 +152,55 @@ describe('DAO', () => {
         })
     })
 
+    describe('DownVoting', () => {
+        let transaction, result
+
+        beforeEach(async () => {
+            transaction = await dao.connect(investor1).createProposal('Proposal 1', ether(100), recipient.address)
+            await transaction.wait()
+
+            transaction = await dao.connect(investor1).vote(1)
+            await transaction.wait()
+
+            transaction = await dao.connect(investor2).vote(1)
+            await transaction.wait()
+        })
+
+        describe('Success', () => {
+            beforeEach(async () => {
+                transaction = await dao.connect(investor3).downVote(1)
+                result = await transaction.wait()
+            })
+
+            it('Updates vote count', async () => {
+                const proposal = await dao.proposals(1)
+                expect(proposal.votes).to.equal(tokens(200000))
+            })
+
+        })
+
+        describe('Failure', () => {
+            it('Rejects non-investor', async () => {
+                await expect(dao.connect(user).downVote(1)).to.be.reverted
+            })
+
+            it('Rejects duplicate vote', async () => {
+                transaction = await dao.connect(investor3).downVote(1)
+                await transaction.wait()
+
+                await expect(dao.connect(investor3).downVote(1)).to.be.reverted
+            })
+
+            it('Rejects duplicate vote - upvote', async () => {
+                transaction = await dao.connect(investor3).vote(1)
+                await transaction.wait()
+
+                await expect(dao.connect(investor3).downVote(1)).to.be.reverted
+            })
+        })
+
+    })
+
     describe('Governance', () => {
         let transaction, result;
 

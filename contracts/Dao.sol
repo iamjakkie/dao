@@ -85,6 +85,17 @@ contract DAO {
         emit Vote(_id, msg.sender);
     }
 
+    function downVote(uint256 _id) external onlyInvestor {
+        Proposal storage proposal = proposals[_id];
+        require(proposal.finalized == false, "Proposal already finalized");
+        require(!votes[msg.sender][_id], "Not voted");
+        proposal.votes -= token.balanceOf(msg.sender);
+
+        votes[msg.sender][_id] = true;
+
+        emit Vote(_id, msg.sender);
+    }
+
     function finalizeProposal(uint256 _id) external onlyInvestor {
         Proposal storage proposal = proposals[_id];
 
