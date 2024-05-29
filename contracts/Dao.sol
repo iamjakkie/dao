@@ -14,6 +14,7 @@ contract DAO {
         string name;
         uint256 amount;
         address payable recipient;
+        string description;
         uint256 votes;
         bool finalized;
     }
@@ -55,7 +56,8 @@ contract DAO {
     function createProposal(
         string memory _name,
         uint256 _amount,
-        address payable _recipient
+        address payable _recipient,
+        string memory _description
     ) external onlyInvestor {
         require(address(this).balance >= _amount, "Not enough Ether");
 
@@ -65,6 +67,7 @@ contract DAO {
             _name,
             _amount,
             _recipient,
+            _description,
             0,
             false
         );
