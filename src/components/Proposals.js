@@ -26,7 +26,7 @@ const Proposals = ({ provider, dao, proposals, quorum, setIsLoading }) => {
         }
         setIsLoading(true)
     }
-    
+
     const finalizeHandler = async (id) => {
         try {
             const signer = await provider.getSigner()
@@ -45,6 +45,7 @@ const Proposals = ({ provider, dao, proposals, quorum, setIsLoading }) => {
                     <th>Proposal Name</th>
                     <th>Recipient Address</th>
                     <th>Amount</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <th>Total Votes</th>
                     <th>Cast Vote</th>
@@ -59,6 +60,7 @@ const Proposals = ({ provider, dao, proposals, quorum, setIsLoading }) => {
                         <td>{proposal.name}</td>
                         <td>{proposal.recipient}</td>
                         <td>{ethers.utils.formatUnits(proposal.amount, 'ether')} ETH</td>
+                        <td>{proposal.description}</td>
                         <td>{proposal.finalized ? "Finalized" : "Open"}</td>
                         <td>{ethers.utils.formatUnits(proposal.votes, 'ether')}</td>
                         <td>

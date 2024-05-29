@@ -9,6 +9,7 @@ const Create = ({ provider, dao, proposals, setIsLoading }) => {
     const [amount, setAmount] = useState(0)
     const [address, setAddress] = useState('')
     const [isWaiting, setIsWaiting] = useState(false)
+    const [description, setDescription] = useState('')
 
 
     const createHandler = async (e) => {
@@ -47,6 +48,12 @@ const Create = ({ provider, dao, proposals, setIsLoading }) => {
                     placeholder='Enter address' 
                     className='my-2'
                     onChange={(e) => setAddress(e.target.value)}
+                />
+                <Form.Control
+                    type='text'
+                    placeholder='Enter description'
+                    className='my-2'
+                    onChange={(e) => setDescription(e.target.value)}
                 />
                 {isWaiting ? (
                     <Spinner animation='border' style={{ display: 'block', margin: '0 auto'}}/>
