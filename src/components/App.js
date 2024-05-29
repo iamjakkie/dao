@@ -88,15 +88,16 @@ function App() {
             setIsLoading={setIsLoading}
           />
           <hr />
-          <p className='text-center'><strong>Treasury Balance:</strong> {treasuryBalance}</p>
-          <p className='text-center'><strong>Quorum:</strong> {quorum}</p>
+          <div>
+            <p className='text-center'><strong>Treasury Balance:</strong> {treasuryBalance}</p>
+            <p className='text-center'><strong>Quorum:</strong> {quorum}</p></div>
           <hr />
 
-          <Proposals 
-            provider={provider} 
-            dao={dao} 
-            proposals={proposals} 
-            quorum={quorum} 
+          <Proposals
+            provider={provider}
+            dao={dao}
+            proposals={proposals}
+            quorum={quorum}
             setIsLoading={setIsLoading}
           />
         </>
