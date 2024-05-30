@@ -156,6 +156,11 @@ describe('DAO', () => {
             it('Emits Vote event', async () => {
                 await expect(transaction).to.emit(dao, 'Vote').withArgs(1, investor1.address);
             })
+
+            it('Has voted returns true', async () => {
+                const voted = await dao.connect(investor1).hasVoted(1);
+                expect(voted).to.equal(true);
+            })
         })
 
         describe('Failure', () => {
@@ -195,6 +200,11 @@ describe('DAO', () => {
             it('Updates vote count', async () => {
                 const proposal = await dao.proposals(1)
                 expect(proposal.votes).to.equal(tokens(200000))
+            })
+
+            it('Has voted returns true', async () => {
+                const voted = await dao.connect(investor3).hasVoted(1);
+                expect(voted).to.equal(true);
             })
 
         })

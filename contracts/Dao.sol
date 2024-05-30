@@ -75,7 +75,9 @@ contract DAO {
         emit Propose(proposalCount, _amount, _recipient, msg.sender);
     }
 
-    
+    function hasVoted(uint256 _id) external view returns (bool) {
+        return votes[msg.sender][_id];
+    }
 
     function vote(uint256 _id) external onlyInvestor {
         Proposal storage proposal = proposals[_id];
