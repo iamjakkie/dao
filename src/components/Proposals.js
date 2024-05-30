@@ -64,7 +64,7 @@ const Proposals = ({ provider, dao, proposals, quorum, setIsLoading }) => {
                         <td>{proposal.finalized ? "Finalized" : "Open"}</td>
                         <td>{ethers.utils.formatUnits(proposal.votes, 'ether')}</td>
                         <td>
-                            {!proposal.finalized && (
+                            {!proposal.finalized && !dao.hasVoted(proposal.id) && (
                                 <Button
                                     variant="primary" 
                                     style={{ width: '100%'}}
@@ -74,7 +74,7 @@ const Proposals = ({ provider, dao, proposals, quorum, setIsLoading }) => {
                             )}
                         </td>
                         <td>
-                            {!proposal.finalized && (
+                            {!proposal.finalized && !dao.hasVoted(proposal.id) && (
                                 <Button
                                     variant="primary" 
                                     style={{ width: '100%'}}
